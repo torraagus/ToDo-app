@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import NewTodo from "./components/newTodo/NewTodo";
+import TodoList from "./components/todoList/TodoList";
+import UpdateTodo from "./components/updateTodo/UpdateTodo";
+import useToDo from "./hooks/useToDo";
 
 function App() {
+  const {
+    todos,
+    setTodos,
+    selectedTodo,
+    setSelectedTodo,
+    deleteToDo,
+    updateToDo,
+  } = useToDo();
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>To-dos</h1>
+      {selectedTodo === "" ? (
+        <NewTodo
+          onNewTodoAdded={(newTodo) => setTodos([...todos, newTodo])}
+        ></NewTodo>
+      ) : (
+        <UpdateTodo
+          selectedTodo={selectedTodo}
+          onUpdatedTodo={(newTodo) => updateToDo(newTodo, selectedTodo)}
+          onUpdateCanceled={() => setSelectedTodo("")}
+        ></UpdateTodo>
+      )}
+      <TodoList
+        todos={todos}
+        onDeleteToDo={(todo) => deleteToDo(todo)}
+        onUpdateToDo={(todo) => setSelectedTodo(todo)}
+      ></TodoList>
     </div>
   );
 }
